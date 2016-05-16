@@ -8,6 +8,7 @@
 </head>
 <body>
 	<button onclick="inc();">Increment</button>
+	<button onclick="del();">Delete</button>
 	
 	<script>
 		GFW.Storage.Setup("test", function() {
@@ -21,6 +22,10 @@
 				GFW.Storage.Set("tVal", (res === undefined || res === null || res === NaN ? 0 : ++res));
 				console.log(res);
 			});
+		}
+		
+		function del() {
+			GFW.Storage.Delete("tVal");
 		}
 	</script>
 </body>

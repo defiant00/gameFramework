@@ -35,3 +35,9 @@ GFW.Storage
 					os.add({key, value: key, val})
 		else
 			log(NotSetup)
+
+	Delete: fn(key)
+		if Instance
+			Instance.transaction([Name], 'readwrite').objectStore(Name)['delete'](key)
+		else
+			log(NotSetup)
