@@ -1,1 +1,1 @@
-# webFramework
+Intended to be a simple HTML 5 web game framework, written in Minet.

@@ -1,0 +1,37 @@
+; Storage, a simple IndexedDB wrapper to store objects.
+
+GFW.Storage
+	Instance, Name
+	NotSetup: 'Storage has not been set up.'
+
+	Setup: fn(name, onSuccess)
+		Name: name
+		var r: window.indexedDB.open(name, 1)
+		r
+			onerror: fn(e)
+				log(e)
+			onsuccess: fn(e)
+				Instance: e.target.result
+				Instance.onerror: fn(ev)
+					log(ev)
+				onSuccess()
+			onupgradeneeded: fn(e)
+				e.target.result.createObjectStore(name, {keyPath: 'key'})
+
+	Get: fn(key, onSuccess)
+		if Instance
+			Instance.transaction(Name).objectStore(Name).get(key).onsuccess: fn(e)
+				onSuccess(if e.target.result then e.target.result.value else undef)
+		else
+			log(NotSetup)
+	
+	Set: fn(key, val)
+		if Instance
+			var os: Instance.transaction([Name], 'readwrite').objectStore(Name)
+			os.get(key).onsuccess: fn(e)
+				if e.target.result
+					os.put({key, value: key, val})
+				else
+					os.add({key, value: key, val})
+		else
+			log(NotSetup)
