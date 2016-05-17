@@ -4,28 +4,28 @@
 <head>
     <meta charset="utf-8" />
     <title>Storage Test</title>
-    <script src="gfw.js"></script>
+    <script src="mnfw.js"></script>
 </head>
 <body>
 	<button onclick="inc();">Increment</button>
 	<button onclick="del();">Delete</button>
 	
 	<script>
-		GFW.Storage.Setup("test", function() {
-			GFW.Storage.Get("tVal", function(res) {
+		var s = new MNFW.Storage('test', function() {
+			s.Get('tVal', function(res) {
 				console.log(res);
 			});
 		});
 		
 		function inc() {
-			GFW.Storage.Get("tVal", function(res) {
-				GFW.Storage.Set("tVal", (res === undefined || res === null || res === NaN ? 0 : ++res));
+			s.Get("tVal", function(res) {
+				s.Set("tVal", (res === undefined || res === null || res === NaN ? 0 : ++res));
 				console.log(res);
 			});
 		}
 		
 		function del() {
-			GFW.Storage.Delete("tVal");
+			s.Delete("tVal");
 		}
 	</script>
 </body>

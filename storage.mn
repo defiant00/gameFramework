@@ -1,43 +1,34 @@
 ; Storage, a simple IndexedDB wrapper to store objects.
 
-GFW.Storage
-	Instance, Name
-	NotSetup: 'Storage has not been set up.'
+MNFW.Storage
+	.db, .name
 
-	Setup: fn(name, onSuccess)
-		Name: name
-		var r: window.indexedDB.open(name, 1)
+	.Storage: fn(dbName, onSuccess)
+		var _t: this
+			r: window.indexedDB.open(dbName, 1)
+		name: dbName
 		r
 			onerror: fn(e)
 				log(e)
 			onsuccess: fn(e)
-				Instance: e.target.result
-				Instance.onerror: fn(ev)
+				_t.db: e.target.result
+				_t.db.onerror: fn(ev)
 					log(ev)
 				onSuccess()
 			onupgradeneeded: fn(e)
-				e.target.result.createObjectStore(name, {keyPath: 'key'})
+				e.target.result.createObjectStore(dbName, {keyPath: 'key'})
 
-	Get: fn(key, onSuccess)
-		if Instance
-			Instance.transaction(Name).objectStore(Name).get(key).onsuccess: fn(e)
-				onSuccess(if e.target.result then e.target.result.value else undef)
-		else
-			log(NotSetup)
-	
-	Set: fn(key, val)
-		if Instance
-			var os: Instance.transaction([Name], 'readwrite').objectStore(Name)
-			os.get(key).onsuccess: fn(e)
-				if e.target.result
-					os.put({key, value: key, val})
-				else
-					os.add({key, value: key, val})
-		else
-			log(NotSetup)
+	.Get: fn(key, onSuccess)
+		db.transaction(name).objectStore(name).get(key).onsuccess: fn(e)
+			onSuccess(if e.target.result then e.target.result.value else undef)
 
-	Delete: fn(key)
-		if Instance
-			Instance.transaction([Name], 'readwrite').objectStore(Name)['delete'](key)
-		else
-			log(NotSetup)
+	.Set: fn(key, val)
+		var os: db.transaction([name], 'readwrite').objectStore(name)
+		os.get(key).onsuccess: fn(e)
+			if e.target.result
+				os.put({key, value: key, val})
+			else
+				os.add({key, value: key, val})
+
+	.Delete: fn(key)
+		db.transaction([name], 'readwrite').objectStore(name)['delete'](key)
