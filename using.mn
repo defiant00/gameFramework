@@ -1,2 +1,2 @@
-use console, window
+use console, window, setInterval, setTimeout
 	log for console.log

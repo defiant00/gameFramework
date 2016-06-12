@@ -1,0 +1,15 @@
+; The core game framework update loop.
+
+MNFW.Game
+	.Elements: []
+	.Timer
+	
+	.Game: fn()
+		var _this: this
+		Timer: setInterval(fn()
+			_this.Update()
+		, 10)
+	
+	.Update: fn()
+		for e in Elements
+			e.Update()
